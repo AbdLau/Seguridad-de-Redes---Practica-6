@@ -1,0 +1,17 @@
+================================================================================
+     INFORME AMPLIADO CIS - CISCO IOS (PÓSTUMO AMPLIADO (TRAS REMEDIACIÓN))
+================================================================================
+Dispositivo Objetivo : 10.8.46.129
+Fecha de Auditoría   : 2026-11-13 14:52:02
+Puntuación Obtenida  : 7/7 (100.0%)
+--------------------------------------------------------------------------------
+ID         | SEVERIDAD  | ESTADO     | CONTROL EVALUADO
+--------------------------------------------------------------------------------
+CIS-1.1    | MEDIA      | CUMPLE     | Servicio de cifrado de contraseñas activado
+CIS-2.1    | BAJA       | CUMPLE     | Deshabilitar CDP globalmente
+CIS-3.2    | MEDIA      | CUMPLE     | Deshabilitar servidor HTTP no seguro
+CIS-3.3    | MEDIA      | CUMPLE     | Deshabilitar IP Source Routing
+CIS-4.2    | BAJA       | CUMPLE     | Sellado de tiempo en logs (Timestamps)
+CIS-6.1    | ALTA       | CUMPLE     | Restricción de transporte SSH en líneas VTY
+CIS-6.2    | MEDIA      | CUMPLE     | Timeout de inactividad configurado en líneas VTY
+================================================================================

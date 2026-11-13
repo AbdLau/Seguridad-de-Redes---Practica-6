@@ -1,0 +1,246 @@
+R1#show running-config
+Building configuration...
+
+Current configuration : 1678 bytes
+!
+! Last configuration change at 18:53:29 UTC Fri Nov 13 2026 by admin
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname R1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$Cd1L$SsjLjxeJvbSXZ7fk1AmHz1
+!
+no aaa new-model
+no ip source-route
+no ip icmp rate-limit unreachable
+!
+!
+!
+ip dhcp excluded-address 10.8.46.129
+!
+ip dhcp pool LAN_CLIENTES
+ network 10.8.46.128 255.255.255.128
+ default-router 10.8.46.129
+ dns-server 8.8.8.8
+!
+!
+!
+no ip domain lookup
+ip domain name lab.local
+ip cef
+no ipv6 cef
+!
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+username admin privilege 15 secret 5 $1$.oST$d4iPXqT1F7eVZAUzmcRlI1
+!
+!
+!
+!
+!
+ip tcp synwait-time 5
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/0
+ no ip address
+ shutdown
+ speed auto
+ duplex auto
+!
+interface FastEthernet0/1
+ no ip address
+ shutdown
+ speed auto
+ duplex auto
+!
+interface GigabitEthernet1/0
+ description LAN_CLIENTES
+ ip address 10.8.46.129 255.255.255.128
+ negotiation auto
+!
+interface GigabitEthernet2/0
+ description ENLACE_A_FORTIGATE
+ ip address 10.8.46.65 255.255.255.192
+ negotiation auto
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip route 0.0.0.0 0.0.0.0 192.168.100.2
+!
+no cdp run
+!
+snmp-server community PUBLIC_LAB RO
+snmp-server location Laboratorio
+snmp-server contact Erick
+!
+!
+control-plane
+!
+banner motd ^CAcceso autorizado solo para personal autorizado^C
+!
+line con 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line aux 0
+ exec-timeout 5 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line vty 0 4
+ login local
+ transport input ssh
+!
+!
+end
+
+R1#show ru
+R1#show running-config
+Building configuration...
+
+Current configuration : 1678 bytes
+!
+! Last configuration change at 18:53:29 UTC Fri Nov 13 2026 by admin
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname R1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$Cd1L$SsjLjxeJvbSXZ7fk1AmHz1
+!
+no aaa new-model
+no ip source-route
+no ip icmp rate-limit unreachable
+!
+!
+!
+ip dhcp excluded-address 10.8.46.129
+!
+ip dhcp pool LAN_CLIENTES
+ network 10.8.46.128 255.255.255.128
+ default-router 10.8.46.129
+ dns-server 8.8.8.8
+!
+!
+!
+no ip domain lookup
+ip domain name lab.local
+ip cef
+no ipv6 cef
+!
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+username admin privilege 15 secret 5 $1$.oST$d4iPXqT1F7eVZAUzmcRlI1
+!
+!
+!
+!
+!
+ip tcp synwait-time 5
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/0
+ no ip address
+ shutdown
+ speed auto
+ duplex auto
+!
+interface FastEthernet0/1
+ no ip address
+ shutdown
+ speed auto
+ duplex auto
+!
+interface GigabitEthernet1/0
+ description LAN_CLIENTES
+ ip address 10.8.46.129 255.255.255.128
+ negotiation auto
+!
+interface GigabitEthernet2/0
+ description ENLACE_A_FORTIGATE
+ ip address 10.8.46.65 255.255.255.192
+ negotiation auto
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip route 0.0.0.0 0.0.0.0 192.168.100.2
+!
+no cdp run
+!
+snmp-server community PUBLIC_LAB RO
+snmp-server location Laboratorio
+snmp-server contact Erick
+!
+!
+control-plane
+!
+banner motd ^CAcceso autorizado solo para personal autorizado^C
+!
+line con 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line aux 0
+ exec-timeout 5 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line vty 0 4
+ login local
+ transport input ssh
+!
+!
+end
+
+R1#

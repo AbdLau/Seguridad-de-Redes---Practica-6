@@ -65,7 +65,7 @@ Todo el direccionamiento privado del laboratorio se calculó a partir de los úl
 
 Se desarrollaron tres scripts en **Python 3** ubicados en la carpeta [`scripts/`](scripts/), que usan **`Paramiko`** para sesiones SSH interactivas y expresiones regulares (`re`) para auditar cada control:
 
-1. **[`scripts/hardening_r1.py`](scripts/hardening_r1.py):** Audita 9 controles CIS en el Router Cisco `R1`, genera [`reportes/informe_r1_inicial.txt`](reportes/informe_r1_inicial.txt) sin modificar el equipo y pregunta `(s/n)` si se desea remediar. Al confirmar, inyecta los comandos, guarda en NVRAM (`write memory`) y genera [`reportes/informe_r1_postum.txt`](reportes/informe_r1_postum.txt).
+1. **[`scripts/hardening_r1.py`](scripts/hardening_r1.py):** Audita 7 controles CIS en el Router Cisco `R1`, genera [`reportes/informe_r1_inicial.txt`](reportes/informe_r1_inicial.txt) sin modificar el equipo y pregunta `(s/n)` si se desea remediar. Al confirmar, inyecta los comandos, guarda en NVRAM (`write memory`) y genera [`reportes/informe_r1_postum.txt`](reportes/informe_r1_postum.txt).
 2. **[`scripts/auditoria_sw1.py`](scripts/auditoria_sw1.py):** Realiza una auditoría directa de solo lectura contra el Switch Cisco `SW1` (`10.8.46.200`) evaluando 4 controles críticos de acceso y cifrado, y genera informes antes y después de la remediación manual en CLI.
 3. **[`scripts/hardening_fortigate.py`](scripts/hardening_fortigate.py):** Se conecta por SSH al Firewall FortiGate (`10.8.46.99`), evalúa `show system global` contra 3 controles CIS de FortiOS, guarda [`reportes/informe_fortigate_inicial.txt`](reportes/informe_fortigate_inicial.txt) y, tras la confirmación `(s/n)`, aplica las directivas globales y genera [`reportes/informe_fortigate_postum.txt`](reportes/informe_fortigate_postum.txt).
 
@@ -75,19 +75,15 @@ Se desarrollaron tres scripts en **Python 3** ubicados en la carpeta [`scripts/`
 
 ### 5.1 Router Cisco (`R1` - `10.8.46.129`)
 
-| ID Control | Comando Aplicado | Severidad | ¿Por qué se aplicó? |
-| --- | --- | --- | --- |
+| ID Control | Comando Aplicado | Severidad | ¿Por qué se aplicó? (Justificación de Seguridad) |
+| :--- | :--- | :--- | :--- |
 | **CIS-1.1** | `service password-encryption` | Media | Evita que las contraseñas locales y de líneas VTY/Consola se almacenen en texto claro en el `running-config`, mitigando su exposición si se compromete un respaldo. |
-| **CIS-2.1** | `service tcp-keepalives-in` | Baja | Detecta y cierra sesiones TCP entrantes huérfanas o colgadas, liberando memoria y evitando el agotamiento de líneas VTY por ataques DoS. |
-| **CIS-2.2** | `service tcp-keepalives-out` | Baja | Garantiza el cierre automático de conexiones salientes inactivas hacia servidores o gestores remotos. |
-| **CIS-3.1** | `no ip source-route` | Alta | Bloquea paquetes IP que especifican su propia ruta en la cabecera, previniendo ataques de *IP Spoofing* y evasión de controles perimetrales. |
-| **CIS-3.2** | `no ip http server` | Media | Deshabilita la interfaz web administrativa sin cifrar (TCP 80), evitando el robo de credenciales en texto plano mediante sniffing. |
-| **CIS-4.1** | `ip ssh time-out 60` | Media | Limita a 60 segundos el tiempo para completar la negociación de autenticación SSH, reduciendo la ventana de exposición de conexiones abiertas. |
-| **CIS-4.2** | `ip ssh authentication-retries 3` | Media | Restringe a 3 los intentos fallidos de inicio de sesión por conexión SSH, mitigando ataques de fuerza bruta automatizados. |
-| **CIS-6.1** | `transport input ssh` | Alta | Deshabilita el protocolo inseguro **Telnet** en las líneas `vty 0 4`, obligando a que toda administración remota viaje cifrada mediante **SSH**. |
+| **CIS-2.1** | `no cdp run` | Baja | Deshabilita el protocolo de descubrimiento de vecinos (Cisco Discovery Protocol) para evitar la fuga de información sensible sobre el modelo, versión de IOS e interfaces hacia atacantes conectados. |
+| **CIS-3.2** | `no ip http server` | Media | Deshabilita la interfaz web administrativa sin cifrar (TCP 80), evitando el robo de credenciales en texto plano mediante sniffing en la red. |
+| **CIS-3.3** | `no ip source-route` | Media | Bloquea paquetes IP que especifican su propia ruta en la cabecera, previniendo ataques de *IP Spoofing* y evasión de controles perimetrales. |
+| **CIS-4.2** | `service timestamps log datetime msec` | Baja | Activa el sellado preciso de fecha y hora en los registros del sistema (*logs*), facilitando la correlación cronológica de eventos durante auditorías o análisis forense de incidentes. |
+| **CIS-6.1** | `transport input ssh` | Alta | Deshabilita el protocolo inseguro **Telnet** en las líneas `vty 0 4`, obligando a que toda administración remota viaje cifrada exclusivamente mediante **SSH**. |
 | **CIS-6.2** | `exec-timeout 10 0` | Media | Cierra automáticamente las sesiones administrativas inactivas tras 10 minutos, previniendo accesos no autorizados desde terminales desatendidas. |
-
-*Adicionalmente se deshabilitaron servicios innecesarios de descubrimiento y arranque con `no cdp run` y `no ip bootp server` para reducir la superficie de ataque.*
 
 ---
 
@@ -116,11 +112,11 @@ Se desarrollaron tres scripts en **Python 3** ubicados en la carpeta [`scripts/`
 
 ### 6.1 Router Cisco `R1`: De 0.0% a 100.0% de Cumplimiento
 
-1. **Auditoría Inicial (vulnerable):** El script detecta que los 9 controles CIS fallan (`0/9 - 0.0%`) y solicita confirmación interactiva.
+1. **Auditoría Inicial (vulnerable):** El script detecta que los 9 controles CIS fallan (`2/7 - 28.6%`) y solicita confirmación interactiva.
 
    ![Auditoría inicial R1](img/03_r1_auditoria_inicial.png)
 
-2. **Remediación Automatizada y Verificación CLI:** Al ingresar `s`, el script aplica los 9 controles, guarda la configuración y confirma **`9/9 (100.0%)`**.
+2. **Remediación Automatizada y Verificación CLI:** Al ingresar `s`, el script aplica los 7 controles, guarda la configuración y confirma **`7/7 (100.0%)`**.
 
    ![Remediación posterior R1](img/04_r1_remediacion_postuma.png)
 
@@ -165,37 +161,3 @@ Se desarrollaron tres scripts en **Python 3** ubicados en la carpeta [`scripts/`
 * [`informe_r1_inicial.txt`](reportes/informe_r1_inicial.txt) | [`informe_r1_postum.txt`](reportes/informe_r1_postum.txt)
 * [`informe_sw1_inicial.txt`](reportes/informe_sw1_inicial.txt) | [`informe_sw1_postum.txt`](reportes/informe_sw1_postum.txt)
 * [`informe_fortigate_inicial.txt`](reportes/informe_fortigate_inicial.txt) | [`informe_fortigate_postum.txt`](reportes/informe_fortigate_postum.txt)
-
----
-
-## 7. Estructura del Repositorio
-
-```text
-├── README.md                              # Documentación técnica del proyecto
-├── scripts/
-│   ├── hardening_r1.py                    # Auditoría y hardening automatizado Router R1
-│   ├── auditoria_sw1.py                   # Auditoría CIS directa Switch SW1
-│   └── hardening_fortigate.py             # Auditoría y hardening automatizado FortiGate
-├── configs/
-│   ├── R1_running-config.txt              # Running-config endurecido del Router R1
-│   ├── SW1_running-config.txt             # Running-config endurecido del Switch SW1
-│   └── FortiGate_running-config.txt       # Configuración endurecida del Firewall FortiGate
-├── reportes/
-│   ├── informe_r1_inicial.txt             # Reporte inicial R1 (0%)
-│   ├── informe_r1_postum.txt              # Reporte posterior R1 (100%)
-│   ├── informe_sw1_inicial.txt            # Reporte inicial SW1
-│   ├── informe_sw1_postum.txt             # Reporte posterior SW1 (100%)
-│   ├── informe_fortigate_inicial.txt      # Reporte inicial FortiGate (0%)
-│   └── informe_fortigate_postum.txt       # Reporte posterior FortiGate (100%)
-└── img/
-    ├── 01_topologia_gns3.png
-    ├── 02_conectividad_ssh_kali.png
-    ├── 03_r1_auditoria_inicial.png
-    ├── 04_r1_remediacion_postuma.png
-    ├── 05_sw1_auditoria_inicial.png
-    ├── 06_sw1_hardening_manual_cli.png
-    ├── 07_sw1_verificacion_postuma.png
-    ├── 08_fortigate_auditoria_y_hardening.png
-    ├── 09_fortigate_verificacion_cli.png
-    └── 10_reportes_generados_txt.png
-```

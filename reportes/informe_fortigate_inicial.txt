@@ -1,0 +1,16 @@
+================================================================================
+     INFORME DE HARDENING - FORTIGATE FIREWALL (INICIAL)
+================================================================================
+Dispositivo Objetivo : 10.8.46.99
+Fecha de Auditoría   : 2026-11-13 14:53:34
+Puntuación Obtenida  : 0/3 (0.0%)
+--------------------------------------------------------------------------------
+ID         | SEVERIDAD  | ESTADO     | CONTROL EVALUADO
+--------------------------------------------------------------------------------
+FORTI-1.1  | MEDIA      | NO CUMPLE  | Inactividad de consola (Idle-timeout <= 15 min)
+  └─ Remedio recomendado: set admintimeout 10
+FORTI-2.1  | BAJA       | NO CUMPLE  | Banner de advertencia Pre-Login habilitado
+  └─ Remedio recomendado: set pre-login-banner enable
+FORTI-3.1  | MEDIA      | NO CUMPLE  | Transferencia segura SCP para respaldos activa
+  └─ Remedio recomendado: set admin-scp enable
+================================================================================

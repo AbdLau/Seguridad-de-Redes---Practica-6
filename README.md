@@ -45,22 +45,6 @@ graph TD
 
 ![Topología GNS3](img/01_topologia_gns3.png)
 
-### 2.3 Flujo de Ejecución de los Scripts de Hardening
-
-```mermaid
-flowchart LR
-    A([Inicio Script Python]) --> B[Conexión SSH vía Paramiko]
-    B --> C[Extracción de Configuración Activa<br/>show running-config / show system global]
-    C --> D[Evaluación Regex contra<br/>Controles CIS Benchmark]
-    D --> E[Generación de Informe Inicial<br/>informe_*_inicial.txt]
-    E --> F{¿Aplicar Remediación<br/>CIS? s/n}
-    F -- No (n) --> G([Fin: Solo Auditoría])
-    F -- Sí (s) --> H[Inyección de Comandos<br/>de Hardening y Guardado]
-    H --> I[Re-evaluación Posterior<br/>de la Configuración]
-    I --> J[Generación de Informe Posterior<br/>informe_*_postum.txt - 100%]
-    J --> G
-```
-
 ---
 
 ## 3. Esquema de Direccionamiento IP

@@ -1,0 +1,13 @@
+================================================================================
+     INFORME DE HARDENING - FORTIGATE FIREWALL (PÓSTUMO (TRAS REMEDIACIÓN))
+================================================================================
+Dispositivo Objetivo : 10.8.46.99
+Fecha de Auditoría   : 2026-11-13 14:55:10
+Puntuación Obtenida  : 3/3 (100.0%)
+--------------------------------------------------------------------------------
+ID         | SEVERIDAD  | ESTADO     | CONTROL EVALUADO
+--------------------------------------------------------------------------------
+FORTI-1.1  | MEDIA      | CUMPLE     | Inactividad de consola (Idle-timeout <= 15 min)
+FORTI-2.1  | BAJA       | CUMPLE     | Banner de advertencia Pre-Login habilitado
+FORTI-3.1  | MEDIA      | CUMPLE     | Transferencia segura SCP para respaldos activa
+================================================================================

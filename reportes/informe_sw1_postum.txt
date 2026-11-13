@@ -1,0 +1,16 @@
+================================================================================
+        INFORME DE AUDITORÍA DE HARDENING CIS - CISCO IOS (INICIAL)
+================================================================================
+Dispositivo Objetivo : 10.8.46.200
+Fecha de Auditoría   : 2026-11-13 14:48:12
+Modo de Operación    : ANÁLISIS DIRECTO POR SSH (Sin aplicar cambios)
+Puntuación Obtenida  : 4/4 (100.0%)
+--------------------------------------------------------------------------------
+ID         | SEVERIDAD  | ESTADO     | CONTROL EVALUADO
+--------------------------------------------------------------------------------
+CIS-1.1    | MEDIA      | CUMPLE     | Servicio de cifrado de contraseñas activado
+CIS-3.2    | MEDIA      | CUMPLE     | Deshabilitar servidor HTTP no seguro
+CIS-6.1    | ALTA       | CUMPLE     | Restricción de transporte SSH en líneas VTY
+CIS-6.2    | MEDIA      | CUMPLE     | Timeout de inactividad configurado en líneas VTY
+================================================================================
+Fin del reporte de auditoría inicial.
